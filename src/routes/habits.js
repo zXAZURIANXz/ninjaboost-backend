@@ -20,6 +20,15 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/', async (req,res) => {
+	try{
+		const data = await UserHabit.find();
+		res.status(200).json(data);
+	}catch (err){
+		res.status(500).json({message:'Error fetching data', error})
+	}
+})
+
 router.get('/', (req, res) => {
   res.send('Funciona la ruta /habits')
 })

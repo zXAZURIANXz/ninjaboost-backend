@@ -8,6 +8,6 @@ const UserHabitSchema = new mongoose.Schema({
     isCompleted : {type: Boolean, required: true },
     icon        : {type: String },
 
-})
+},{ timestamps: true })
 
 module.exports = mongoose.model('UserHabit', UserHabitSchema);
