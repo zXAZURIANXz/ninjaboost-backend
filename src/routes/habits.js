@@ -1,6 +1,7 @@
 const UserHabit = require('../models/UserHabit');
-const express = require('express');
-const router = express.Router();
+const express 	= require('express');
+const router 		= express.Router();
+const dayjs 		= require('dayjs');
 
 /* Create new habit */
 router.post('/', async (req, res) => {
@@ -34,13 +35,21 @@ router.get('/', async (req,res) => {
 
 /* Mark Habit like complete by day */
 router.post('/complete', async (req,res) => {
-	const { isCompleted, date, _idHabit } = req.body;
+	const { isCompleted, _idHabit } = req.body;
+	const date = dayjs().format('YYYY-MM-DD');
 	try{
+
+		const habit = await UserHabit.findById(_idHabit);
+
+		if (!habit) {
+      return res.status(404).json({ message: 'Habit not found' });
+    }
+
 		const data = await UserHabit.findByIdAndUpdate(
 			_idHabit,
 			{
 				$set: { isCompleted: isCompleted },
-				$push: { completedDates: date }
+				$addToSet: { completedDates: date }
 			},
 			{ new: true }
 		);
