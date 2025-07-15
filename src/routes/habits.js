@@ -45,15 +45,31 @@ router.post('/complete', async (req,res) => {
       return res.status(404).json({ message: 'Habit not found' });
     }
 
-		const data = await UserHabit.findByIdAndUpdate(
-			_idHabit,
-			{
-				$set: { isCompleted: isCompleted },
-				$addToSet: { completedDates: date }
-			},
-			{ new: true }
-		);
-		res.status(200).json(data);
+		const dateExists = habit.completedDates.includes(date);
+		let updatedHabit;
+
+		if (dateExists) {
+      // Si la fecha ya existe, elimínala
+      updatedHabit = await UserHabit.findByIdAndUpdate(
+        _idHabit,
+        {
+          $set: { isCompleted: isCompleted },
+          $pull: { completedDates: date }
+        },
+        { new: true }
+      );
+    } else {
+      // Si la fecha no existe, agrégala
+      updatedHabit = await UserHabit.findByIdAndUpdate(
+        _idHabit,
+        {
+          $set: { isCompleted: isCompleted },
+          $addToSet: { completedDates: date }
+        },
+        { new: true }
+      );
+    }
+		res.status(200).json(updatedHabit);
 	}catch (error){
 		res.status(500).json({message:'Error fetching data', error})
 	}
