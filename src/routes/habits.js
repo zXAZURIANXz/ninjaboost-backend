@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
     await newHabit.save();
     res.status(201).json(newHabit);
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear hábito' });
+    res.status(500).json({ error: 'Failed to create a new habit' });
   }
 });
 
@@ -74,6 +74,9 @@ router.post('/complete', async (req,res) => {
 		res.status(500).json({message:'Error fetching data', error})
 	}
 })
+
+
+
 
 
 

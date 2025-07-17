@@ -8,7 +8,9 @@ const createError  = require('http-errors'),
 	 		connectDB 	 = require('./config/db'),
 			cors 				 = require('cors');
 
+
 const habitsRouter = require('./routes/habits');
+const userRouter   = require('./routes/users');
 
 const app = express();
 
@@ -28,6 +30,7 @@ app.use(cors());
 
 //endpoints
 app.use('/habits', habitsRouter);
+app.use('/auth', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
